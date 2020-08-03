@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "943290148394",
+    "firebase_url": "https://fetocardia.firebaseio.com",
+    "project_id": "fetocardia",
+    "storage_bucket": "fetocardia.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:943290148394:android:6fadd7f658fdbfdc2e8553",
+        "android_client_info": {
+          "package_name": "com.example.Electrikapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "943290148394-ck37fdhflgbrtmv2lsm623far9aaub4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNLgdeEg-Z59FzH5q2BShK3XKxBOaUpmg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "943290148394-ck37fdhflgbrtmv2lsm623far9aaub4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
