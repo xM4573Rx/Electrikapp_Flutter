@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:Electrikapp/Pages/new.dart';
 
 class GroupsPage extends StatefulWidget {
   @override
@@ -39,7 +40,15 @@ class _GroupsPageState extends State<GroupsPage> {
   Widget _signInButton() {
     return OutlineButton(
       splashColor: Colors.blue,
-      onPressed: () {},
+      onPressed: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return NewPage();
+            },
+          ),
+        );
+      },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
       borderSide: BorderSide(color: Colors.blue),
