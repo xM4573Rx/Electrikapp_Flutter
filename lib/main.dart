@@ -1,6 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:wifi/wifi.dart';
+import 'package:Electrikapp/Pages/register.dart';
 
 void main() => runApp(MyApp());
 
@@ -10,18 +9,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Electrikapp',
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome'),
-        ),
+        /*appBar: AppBar(
+          title: Text('Electrikapp'),
+        ),*/
         body: Center(
-          child: LoginPage(),
+          child: RegisterPage(),
         ),
       ),
     );
   }
 }
 
-class LoginPage extends StatefulWidget {
+/*class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -42,8 +41,20 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    //final wordPair = WordPair.random();
-    return Text('wordPair.asPascalCase');
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          RaisedButton.icon(
+            onPressed: () {},
+            textColor: Colors.white,
+            icon: Icon(Icons.g_translate),
+            label: const Text('Acceder con Google'),
+            color: Colors.red,
+          ),
+        ],
+      ),
+    );
   }
 
   void loadData() async {
@@ -65,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       level = l;
       _wifiName = wifiName;
-      print('$_wifiName');
+      //print('$_wifiName');
     });
   }
-}
+}*/

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "112951125031",
+    "firebase_url": "https://fbef-69133.firebaseio.com",
+    "project_id": "fbef-69133",
+    "storage_bucket": "fbef-69133.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:112951125031:android:485b145a8ae2b9081a5a02",
+        "android_client_info": {
+          "package_name": "com.Electrikapp.ElectrikappFlutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "112951125031-e5fi3asr2edtnfhmsq2t0bmsp12ulcp1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.Electrikapp.ElectrikappFlutter",
+            "certificate_hash": "dd1e307132f446d113997a7cdf2268fa678165a4"
+          }
+        },
+        {
+          "client_id": "112951125031-drbhfi6kikjgatb88efmgcm9nm7um55p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjF0Z_rwkoDAzOoW6Qg8rbzXz6k8g3RZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "112951125031-drbhfi6kikjgatb88efmgcm9nm7um55p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
