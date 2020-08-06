@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:wifi/wifi.dart';
+
 import 'package:Electrikapp/Pages/groups.dart';
 
 export 'register.dart';
@@ -16,17 +16,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _wifiName = 'click button to get wifi ssid.';
-  int level = 0;
-  String _ip = 'click button to get ip.';
-  List<WifiResult> ssidList = [];
-  String ssid = '', password = '';
-
   @override
   void initState() {
     super.initState();
-    loadData();
-    _getWifiName();
     userLogged();
   }
 
@@ -131,28 +123,5 @@ class _RegisterPageState extends State<RegisterPage> {
     } else {
       print('Nada mi vale');
     }
-  }
-
-  void loadData() async {
-    Wifi.list('').then((list) {
-      setState(() {
-        ssidList = list;
-
-        for (var i = 0; i < ssidList.length; i++) {
-          print('${ssidList[i].ssid}');
-        }
-      });
-    });
-  }
-
-  Future<Null> _getWifiName() async {
-    int l = await Wifi.level;
-    String wifiName = await Wifi.ssid;
-    //print('$wifiName');
-    setState(() {
-      level = l;
-      _wifiName = wifiName;
-      //print('$_wifiName');
-    });
   }
 }
