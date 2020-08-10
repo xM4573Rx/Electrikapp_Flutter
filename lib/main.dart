@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:Electrikapp/pages/root.dart';
+import 'package:Electrikapp/services/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
+import 'package:Electrikapp/pages/login.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,19 +11,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Electrikapp',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome'),
-        ),
-        body: Center(
-          child: LoginPage(),
-        ),
+      home: RootPage(
+        authFireBase: new AuthFireBase(),
       ),
     );
   }
 }
-
+/*
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -69,3 +68,4 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 }
+*/
