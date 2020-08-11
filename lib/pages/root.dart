@@ -23,19 +23,30 @@ class RootPageState extends State<RootPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return new Scaffold(
-      //appBar: new AppBar(title: new Text('Espera...')),
-      backgroundColor: Colors.white,
-      body: new FutureBuilder(
-          future: AuthFireBase().currentUser(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else {
+    return new FutureBuilder(
+        future: AuthFireBase().signIn('email', 'password'),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return new Scaffold(
+                appBar: new AppBar(title: new Text('Espera...')),
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: CircularProgressIndicator(),
+                ));
+          } else {
+            print('UID Cliente: ' + snapshot.data.toString());
+            if (snapshot.data.toString() != 'null') {
               return HomePage();
+            } else {
+              return new LoginPage(
+                title: 'Login',
+                auth: widget.authFireBase,
+                onSignIn: () => updateAuthStatus(AuthStatus.signedIn),
+              );
             }
-          }),
-    );
+          }
+        });
+
     /*switch (authStatus) {
       case AuthStatus.notSignedIn:
         print('Sin Iniciae.....');
