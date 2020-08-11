@@ -69,7 +69,7 @@ class LoginPageState extends State<LoginPage> {
           new FlatButton(
               child: Icon(
                   Icons.person_add), //new Text("No tienes cuenta? Registrate"),
-              onPressed: () => updateFormType(FormType.register))
+              onPressed: () => {updateFormType(FormType.register)})
         ];
       case FormType.register:
         return [
