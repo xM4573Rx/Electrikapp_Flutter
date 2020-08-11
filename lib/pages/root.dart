@@ -17,65 +17,40 @@ class RootPageState extends State<RootPage> {
   @override
   void initState() {
     // TODO: implement initState
-
-    widget.authFireBase.currentUser().then((userId) {
-      setState(() {
-        authStatus =
-            userId != null ? AuthStatus.signedIn : AuthStatus.notSignedIn;
-      });
-    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
-    switch (authStatus) {
-      case AuthStatus.notSignedIn:
-        print('Case 1');
-        return new FutureBuilder(
+    return new Scaffold(
+      //appBar: new AppBar(title: new Text('Espera...')),
+      backgroundColor: Colors.white,
+      body: new FutureBuilder(
           future: AuthFireBase().currentUser(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Center(child: CircularProgressIndicator());
             } else {
-              return new LoginPage(
-                title: 'Login',
-                auth: widget.authFireBase,
-                onSignIn: () => updateAuthStatus(AuthStatus.signedIn),
-              );
+              return HomePage();
             }
-          },
+          }),
+    );
+    /*switch (authStatus) {
+      case AuthStatus.notSignedIn:
+        print('Sin Iniciae.....');
+        return new LoginPage(
+          title: 'Login',
+          auth: widget.authFireBase,
+          onSignIn: () => updateAuthStatus(AuthStatus.signedIn),
         );
       case AuthStatus.signedIn:
-        print('Case 2');
-        return new FutureBuilder(
-          future: AuthFireBase().signIn('j@electrik.app', '1234567890'),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            } else {
-              print('UID Cliente: ' + snapshot.data.toString());
-              if (snapshot.data.toString() == 'null') {
-                print('Si el Null Existe');
-              }
-              if (snapshot.data.toString() != 'null') {
-                return new HomePage(
-                  onSignIn: () => updateAuthStatus(AuthStatus.notSignedIn),
-                  authFireBase: widget.authFireBase,
-                );
-              } else {
-                return new LoginPage(
-                  title: 'Login',
-                  auth: widget.authFireBase,
-                  onSignIn: () => updateAuthStatus(AuthStatus.signedIn),
-                );
-              }
-            }
-          },
+        print('Iniciado....');
+        return new HomePage(
+          onSignIn: () => updateAuthStatus(AuthStatus.notSignedIn),
+          authFireBase: widget.authFireBase,
         );
-    }
+    }*/
   }
 
 /*
@@ -129,3 +104,24 @@ return new FutureBuilder(
     });
   }
 }
+/*
+  return new FutureBuilder(
+          future: AuthFireBase().currentUser(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                  child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                backgroundColor: Colors.transparent,
+                strokeWidth: 10,
+              ));
+            } else {
+              return new LoginPage(
+                title: 'Login',
+                auth: widget.authFireBase,
+                onSignIn: () => updateAuthStatus(AuthStatus.signedIn),
+              );
+            }
+          },
+        );
+ */
