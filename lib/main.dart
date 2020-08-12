@@ -8,6 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'FetoCardia',
         theme: ThemeData(primarySwatch: Colors.blue),
         home: HomePage());
