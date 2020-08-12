@@ -28,6 +28,9 @@ class _GroupsPageState extends State<GroupsPage> {
                     color: Colors.blue,
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 _signInButton(),
               ],
             ),
@@ -38,32 +41,24 @@ class _GroupsPageState extends State<GroupsPage> {
   }
 
   Widget _signInButton() {
-    return OutlineButton(
-      splashColor: Colors.blue,
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return NewPage();
-            },
-          ),
-        );
-      },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
-      highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.blue),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              Icons.add,
-              color: Colors.blue,
+    return Ink(
+      decoration: const ShapeDecoration(
+        color: Colors.blue,
+        shape: CircleBorder(),
+      ),
+      child: IconButton(
+        icon: Icon(Icons.add),
+        color: Colors.white,
+        splashColor: Colors.blue,
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return NewPage();
+              },
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
