@@ -1,5 +1,6 @@
 import 'package:Electrikapp/class/graph.dart';
 import 'package:Electrikapp/services/auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -8,6 +9,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final DBRef = FirebaseDatabase.instance.reference();
   Widget _bottomAction(IconData icon) {
     return InkWell(
       child: Padding(padding: const EdgeInsets.all(8.0), child: Icon(icon)),
@@ -37,8 +39,11 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton:
-          FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            writeData();
+          }),
       body: _body(),
     );
   }
@@ -125,4 +130,6 @@ class _HomePageState extends State<HomePage> {
       },
     ));
   }
+
+  void writeData() {}
 }
