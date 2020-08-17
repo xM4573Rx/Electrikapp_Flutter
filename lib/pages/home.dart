@@ -1,4 +1,6 @@
+import 'package:Electrikapp/class/circle.dart';
 import 'package:Electrikapp/class/graph.dart';
+import 'package:Electrikapp/pages/view.dart';
 import 'package:Electrikapp/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final DBRef = FirebaseDatabase.instance.reference();
+  //Controler PageView
+  PageController _controller;
+  int currentPage = 3;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller =
+        PageController(initialPage: currentPage, viewportFraction: 0.4);
+  }
+
+  final DBRef = FirebaseDatabase.instance.reference().child('path');
+
   Widget _bottomAction(IconData icon) {
     return InkWell(
       child: Padding(padding: const EdgeInsets.all(8.0), child: Icon(icon)),
@@ -51,85 +66,60 @@ class _HomePageState extends State<HomePage> {
   Widget _body() {
     return SafeArea(
         child: Column(
-      children: <Widget>[_selector(), _expenses(), _graph(), _list()],
+      children: <Widget>[_selector(), ViewWidget()],
     ));
   }
 
-  Widget _selector() => Container();
-  Widget _expenses() {
-    return Column(
-      children: <Widget>[
-        Text(
-          '\$2345.5',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 40.0),
-        ),
-        Text(
-          'Total Ganancias',
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.0,
-              color: Colors.blueGrey),
-        ),
-      ],
+  Widget _pageItem(String name, int position) {
+    var _alignmet;
+
+    final selected = TextStyle(
+        fontSize: 20, fontWeight: FontWeight.bold, color: Colors.blueGrey);
+
+    final unselected = TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.normal,
+        color: Colors.blueGrey.withOpacity(0.4));
+
+    if (position == currentPage) {
+      _alignmet = Alignment.center;
+    } else if (position > currentPage) {
+      _alignmet = Alignment.centerRight;
+    } else {
+      _alignmet = Alignment.centerLeft;
+    }
+
+    return Align(
+      child: Text(
+        name,
+        style: position == currentPage ? selected : unselected,
+      ),
+      alignment: _alignmet,
     );
   }
 
-  Widget _graph() {
-    return Container(
-      height: 250.0,
-      child: GraphWidget(),
-    );
-  }
-
-  Widget _item(IconData icon, String name, int porcent, double value) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          size: 32.0,
-        ),
-        title: Text(
-          name,
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        subtitle: Text(
-          '$porcent% of expenses',
-          style: TextStyle(fontSize: 16.0, color: Colors.blueGrey),
-        ),
-        trailing: Container(
-          decoration: BoxDecoration(
-              color: Colors.blueAccent.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(5.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              '\$$value',
-              style: TextStyle(color: Colors.blueAccent),
-            ),
-          ),
-        ),
+  Widget _selector() {
+    return SizedBox.fromSize(
+      size: Size.fromHeight(70.0),
+      child: PageView(
+        onPageChanged: (newPage) {
+          setState(() {
+            currentPage = newPage;
+          });
+        },
+        controller: _controller,
+        children: <Widget>[
+          _pageItem('Vista Pesos', 0),
+          _pageItem('Vista KWH', 1),
+          // _pageItem('Vista Tres', 2),
+          // _pageItem('Vista Cuatro', 3),
+          // _pageItem('Vista Cinco', 4),
+        ],
       ),
     );
   }
 
-  Widget _list() {
-    return Expanded(
-        child: ListView.separated(
-      itemCount: 14,
-      itemBuilder: (context, index) => RaisedButton(
-        onPressed: () {},
-        child: _item(Icons.ac_unit, 'Agua', 20, 23),
-      )
-      /*_item(Icons.phone_android, 'Shopping', 14, 145.12)*/,
-      separatorBuilder: (context, index) {
-        return Container(
-          color: Colors.blueAccent.withOpacity(0.15),
-          height: 8,
-        );
-      },
-    ));
+  void writeData() {
+    //DBRef.onChildAdded
   }
-
-  void writeData() {}
 }
