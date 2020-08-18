@@ -57,7 +57,8 @@ class _NewPageState extends State<NewPage> {
         for (var i = 0; i < ssidList.length; i++) {
           print('${ssidList[i].ssid}');
           if (ssidList[i].ssid == 'ElectrikAppCentral') {
-            connection('ElectrikAppCentral', '12345678')
+            connection('ElectrikAppCentral' /*'ElectrikAppCentral'*/,
+                    '12345678' /*'12345678'*/)
                 .then((value) => Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
