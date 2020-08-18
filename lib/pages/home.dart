@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:Electrikapp/class/circle.dart';
 import 'package:Electrikapp/class/graph.dart';
 import 'package:Electrikapp/pages/view.dart';
@@ -14,16 +16,19 @@ class _HomePageState extends State<HomePage> {
   //Controler PageView
   PageController _controller;
   int currentPage = 3;
-
+  final DBRef = FirebaseDatabase.instance.reference().child('path');
+  StreamSubscription<Event> _onChildAdded;
+  StreamSubscription<Event> _onChildChanged;
+  StreamSubscription<Event> _onChildMoved;
+  StreamSubscription<Event> _onChildRemoved;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _onChildChanged = DBRef.onChildChanged.listen((event) {});
     _controller =
         PageController(initialPage: currentPage, viewportFraction: 0.4);
   }
-
-  final DBRef = FirebaseDatabase.instance.reference().child('path');
 
   Widget _bottomAction(IconData icon) {
     return InkWell(
@@ -66,7 +71,13 @@ class _HomePageState extends State<HomePage> {
   Widget _body() {
     return SafeArea(
         child: Column(
-      children: <Widget>[_selector(), ViewWidget()],
+      children: <Widget>[
+        _selector(),
+        StreamBuilder<Event>(
+            builder: (BuildContext context, AsyncSnapshot<Event> data) {
+          return ViewWidget();
+        })
+      ],
     ));
   }
 
