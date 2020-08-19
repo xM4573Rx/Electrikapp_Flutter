@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:Electrikapp/Pages/groups.dart';
 
@@ -16,6 +17,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   @override
   void initState() {
     super.initState();
@@ -111,8 +114,12 @@ class _RegisterPageState extends State<RegisterPage> {
   // Usuario registrado
   void userLogged() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    final SharedPreferences prefs = await _prefs;
+
     if (user != null) {
-      print('${user.displayName}');
+      setState(() {
+        prefs.setString('Name', user.displayName);
+      });
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {

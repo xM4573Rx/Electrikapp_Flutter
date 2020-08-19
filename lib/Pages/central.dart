@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi/wifi.dart';
@@ -13,7 +15,9 @@ class _CentralPageState extends State<CentralPage> {
   String _net;
   String _pass;
   String _name;
-  String _data;
+  String _userName;
+  String _groupName;
+  var _data;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _netController = new TextEditingController();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
@@ -21,6 +25,7 @@ class _CentralPageState extends State<CentralPage> {
   void initState() {
     super.initState();
     _loadNetName();
+    _loadGroupName();
   }
 
   @override
@@ -66,11 +71,13 @@ class _CentralPageState extends State<CentralPage> {
                           return;
                         }
                         _formKey.currentState.save();
-                        print(_net);
-                        print(_pass);
-                        print(_name);
 
-                        _data = '{"Red": $_net, "Pass": $_pass}';
+                        // _data = '{"Red": $_net, "Pass": $_pass}';
+                        _data = {
+                          'Red': _net,
+                          'Pass': _pass,
+                          'Name': _groupName
+                        };
                         sendData(_data);
                         // _makePostRequest();
                         //connection('ssid', 'password');
@@ -141,6 +148,7 @@ class _CentralPageState extends State<CentralPage> {
       },
       onSaved: (newValue) {
         _name = newValue;
+        _groupName = '$_name' + '_' + '$_userName';
       },
     );
   }
@@ -152,17 +160,27 @@ class _CentralPageState extends State<CentralPage> {
     });
   }
 
+  void _loadGroupName() async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      _userName = prefs.getString('Name');
+    });
+  }
+
   Future<Null> connection(String ssid, String password) async {
     Wifi.connection(ssid, password).then((v) {
       print(v);
     });
   }
 
-  Future<void> sendData(String data) async {
+  Future<void> sendData(var data) async {
     String url = 'http://192.168.4.1/data.json';
     Map<String, String> headers = {"Content-type": "application/json"};
 
-    var response = await http.post(url, headers: headers, body: data);
+    String _body = json.encode(data);
+    // String _body = data;
+
+    var response = await http.post(url, headers: headers, body: _body);
 
     int statusCode = response.statusCode;
     print(statusCode);
