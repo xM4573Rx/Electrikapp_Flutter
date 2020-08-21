@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wifi/wifi.dart';
 
 import 'package:Electrikapp/Pages/groups.dart';
+import 'package:Electrikapp/Pages/groups_two.dart';
 
 export 'register.dart';
 
@@ -23,6 +25,8 @@ class _RegisterPageState extends State<RegisterPage> {
   void initState() {
     super.initState();
     userLogged();
+    _getWifiName();
+    _loadData();
   }
 
   @override
@@ -35,8 +39,10 @@ class _RegisterPageState extends State<RegisterPage> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              FlutterLogo(size: 150),
-              SizedBox(height: 50),
+              Image(
+                image: AssetImage('assets/images/name_sin_fondo.png'),
+                height: 130,
+              ),
               _signInButton(),
             ],
           ),
@@ -93,6 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
     final GoogleSignInAuthentication googleSignInAuthentication =
         await googleSignInAccount.authentication;
+    final SharedPreferences prefs = await _prefs;
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleSignInAuthentication.accessToken,
@@ -108,6 +115,10 @@ class _RegisterPageState extends State<RegisterPage> {
     final FirebaseUser currentUser = await _auth.currentUser();
     assert(user.uid == currentUser.uid);
 
+    setState(() {
+      prefs.setString('Name', user.displayName);
+    });
+
     return 'signInWithGoogle succeeded: $user';
   }
 
@@ -117,18 +128,36 @@ class _RegisterPageState extends State<RegisterPage> {
     final SharedPreferences prefs = await _prefs;
 
     if (user != null) {
-      setState(() {
-        prefs.setString('Name', user.displayName);
-      });
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            return GroupsPage();
-          },
-        ),
-      );
+      if (prefs.containsKey('Group')) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return GroupsTwoPage();
+            },
+          ),
+        );
+      } else {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) {
+              return GroupsPage();
+            },
+          ),
+        );
+      }
     } else {
-      print('Nada mi vale');
+      print('User not logged');
     }
+  }
+
+  Future<Null> _getWifiName() async {
+    final SharedPreferences prefs = await _prefs;
+    String wifiName = await Wifi.ssid;
+  }
+
+  void _loadData() async {
+    Wifi.list('').then((list) {
+      setState(() {});
+    });
   }
 }

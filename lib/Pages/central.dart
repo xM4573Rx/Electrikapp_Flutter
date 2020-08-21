@@ -5,6 +5,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi/wifi.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:Electrikapp/Pages/groups.dart';
+import 'package:Electrikapp/Pages/groups_two.dart';
+
 class CentralPage extends StatefulWidget {
   @override
   _CentralPageState createState() => _CentralPageState();
@@ -25,7 +28,7 @@ class _CentralPageState extends State<CentralPage> {
   void initState() {
     super.initState();
     _loadNetName();
-    _loadGroupName();
+    _loadUserName();
   }
 
   @override
@@ -72,14 +75,13 @@ class _CentralPageState extends State<CentralPage> {
                         }
                         _formKey.currentState.save();
 
-                        // _data = '{"Red": $_net, "Pass": $_pass}';
                         _data = {
                           'Red': _net,
                           'Pass': _pass,
                           'Name': _groupName
                         };
+
                         sendData(_data);
-                        // _makePostRequest();
                         //connection('ssid', 'password');
                       }),
                 )
@@ -149,6 +151,9 @@ class _CentralPageState extends State<CentralPage> {
       onSaved: (newValue) {
         _name = newValue;
         _groupName = '$_name' + '_' + '$_userName';
+        _groupName = _groupName.replaceAll(RegExp(' '), '_');
+
+        _saveGroupName(_name, _userName, _groupName);
       },
     );
   }
@@ -160,10 +165,19 @@ class _CentralPageState extends State<CentralPage> {
     });
   }
 
-  void _loadGroupName() async {
+  void _loadUserName() async {
     final SharedPreferences prefs = await _prefs;
     setState(() {
       _userName = prefs.getString('Name');
+      print(_userName);
+    });
+  }
+
+  void _saveGroupName(String name, String user, String group) async {
+    final SharedPreferences prefs = await _prefs;
+    setState(() {
+      prefs.setString('Group', group);
+      prefs.setString('Device', name);
     });
   }
 
@@ -186,26 +200,23 @@ class _CentralPageState extends State<CentralPage> {
     print(statusCode);
     String body = response.body;
     print(body);
-  }
 
-  _makePostRequest() async {
-    // set up POST request arguments
-    String url = 'https://jsonplaceholder.typicode.com/posts';
-    Map<String, String> headers = {"Content-type": "application/json"};
-    String json = '{"title": "Hello", "body": "body text", "userId": 1}';
-    // make POST request
-    var response = await http.post(url, headers: headers, body: json);
-    // check the status code for the result
-    int statusCode = response.statusCode;
-    print(statusCode);
-    // this API passes back the id of the new item added to the body
-    String body = response.body;
-    print(body);
-    // {
-    //   "title": "Hello",
-    //   "body": "body text",
-    //   "userId": 1,
-    //   "id": 101
-    // }
+    if (statusCode == 200) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return GroupsTwoPage();
+          },
+        ),
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return GroupsPage();
+          },
+        ),
+      );
+    }
   }
 }

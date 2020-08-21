@@ -83,7 +83,7 @@ class _NewPageState extends State<NewPage> {
 
   Future<Null> connection(String ssid, String password) async {
     Wifi.connection(ssid, password).then((v) {
-      print(v);
+      // print(v);
       _timer.cancel();
     });
   }
