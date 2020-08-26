@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:Electrikapp/Pages/home.dart';
+
 class GroupsTwoPage extends StatefulWidget {
   @override
   _GroupsTwoPageState createState() => _GroupsTwoPageState();
@@ -29,7 +31,17 @@ class _GroupsTwoPageState extends State<GroupsTwoPage> {
           child: Center(
             child: Column(
               children: <Widget>[
-                Card(
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return HomePage();
+                        },
+                      ),
+                    );
+                  },
+                  child: Card(
                     margin: EdgeInsets.all(12),
                     child: Padding(
                       padding: EdgeInsets.all(12),
@@ -42,7 +54,9 @@ class _GroupsTwoPageState extends State<GroupsTwoPage> {
                           )
                         ],
                       ),
-                    ))
+                    ),
+                  ),
+                )
               ],
             ),
           ),
