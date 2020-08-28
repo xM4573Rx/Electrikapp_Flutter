@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:Electrikapp/Pages/home.dart';
+import 'home.dart';
 
 class GroupsTwoPage extends StatefulWidget {
   @override
@@ -26,6 +26,11 @@ class _GroupsTwoPageState extends State<GroupsTwoPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text('Grupos'),
+          flexibleSpace: Image(
+            image: AssetImage('assets/images/background_tonos.png'),
+            fit: BoxFit.cover,
+          ),
+          backgroundColor: Colors.transparent,
         ),
         body: Container(
           child: Center(

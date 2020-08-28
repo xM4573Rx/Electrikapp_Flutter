@@ -5,8 +5,9 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi/wifi.dart';
 
-import 'package:Electrikapp/Pages/groups.dart';
-import 'package:Electrikapp/Pages/groups_two.dart';
+import 'groups.dart';
+import 'groups_two.dart';
+import 'home.dart';
 
 export 'register.dart';
 
@@ -129,13 +130,23 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (user != null) {
       if (prefs.containsKey('Group')) {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) {
-              return GroupsTwoPage();
-            },
-          ),
-        );
+        if (prefs.containsKey('Device')) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return HomePage();
+              },
+            ),
+          );
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return GroupsTwoPage();
+              },
+            ),
+          );
+        }
       } else {
         Navigator.of(context).push(
           MaterialPageRoute(

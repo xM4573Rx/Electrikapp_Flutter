@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:Electrikapp/Pages/central.dart';
+import 'central.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 import 'package:shared_preferences/shared_preferences.dart';

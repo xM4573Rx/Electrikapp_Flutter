@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:Electrikapp/Pages/new.dart';
+import 'new.dart';
 
 class GroupsPage extends StatefulWidget {
   @override
@@ -15,6 +15,11 @@ class _GroupsPageState extends State<GroupsPage> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           title: Text('Grupos'),
+          flexibleSpace: Image(
+            image: AssetImage('assets/images/background_tonos.png'),
+            fit: BoxFit.cover,
+          ),
+          backgroundColor: Colors.transparent,
         ),
         body: Container(
           child: Center(

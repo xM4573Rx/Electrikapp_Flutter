@@ -4,9 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wifi/wifi.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_database/firebase_database.dart';
 
-import 'package:Electrikapp/Pages/groups.dart';
-import 'package:Electrikapp/Pages/groups_two.dart';
+import 'groups.dart';
+import 'groups_two.dart';
 
 class CentralPage extends StatefulWidget {
   @override
@@ -20,9 +21,11 @@ class _CentralPageState extends State<CentralPage> {
   String _name;
   String _userName;
   String _groupName;
+  String _path = 'Groups/';
   var _data;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _netController = new TextEditingController();
+  final DatabaseReference _reference = FirebaseDatabase.instance.reference();
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   @override
   void initState() {
@@ -205,6 +208,7 @@ class _CentralPageState extends State<CentralPage> {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
+            _createDB();
             return GroupsTwoPage();
           },
         ),
@@ -218,5 +222,18 @@ class _CentralPageState extends State<CentralPage> {
         ),
       );
     }
+  }
+
+  void _createDB() {
+    _reference
+        .child(_path)
+        .child(_groupName)
+        .child('All')
+        .set({'Name': 'Oficina', 'Energy': 0, 'Power': 0});
+    _reference
+        .child(_path)
+        .child(_groupName)
+        .child('Settings')
+        .set({'Date': 0, 'Cost': 0, 'Projection': 0});
   }
 }
