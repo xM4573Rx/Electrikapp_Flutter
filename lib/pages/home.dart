@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:Electrikapp/class/circle.dart';
 import 'package:Electrikapp/class/graph.dart';
+import 'package:Electrikapp/models/dataFetoCardia.dart';
 import 'package:Electrikapp/pages/view.dart';
 import 'package:Electrikapp/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -16,16 +18,18 @@ class _HomePageState extends State<HomePage> {
   //Controler PageView
   PageController _controller;
   int currentPage = 3;
-  final DBRef = FirebaseDatabase.instance.reference().child('path');
-  StreamSubscription<Event> _onChildAdded;
-  StreamSubscription<Event> _onChildChanged;
-  StreamSubscription<Event> _onChildMoved;
-  StreamSubscription<Event> _onChildRemoved;
+  DatabaseReference dBRef =
+      FirebaseDatabase.instance.reference().child('dataMedico');
+
+//  StreamSubscription<Event> _onChildAdded;
+//  StreamSubscription<Event> _onChildChanged;
+//  StreamSubscription<Event> _onChildMoved;
+//  StreamSubscription<Event> _onChildRemoved;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    _onChildChanged = DBRef.onChildChanged.listen((event) {});
+
     _controller =
         PageController(initialPage: currentPage, viewportFraction: 0.4);
   }
@@ -74,9 +78,27 @@ class _HomePageState extends State<HomePage> {
       children: <Widget>[
         _selector(),
         StreamBuilder<Event>(
-            builder: (BuildContext context, AsyncSnapshot<Event> data) {
-          return ViewWidget();
-        })
+            stream: dBRef.onValue,
+            builder: (context, snapshat) {
+              if (snapshat.hasData) {
+                var resq = snapshat.data.snapshot;
+                var name;
+                Map<dynamic, dynamic> values = resq.value;
+                /*     var key = values.forEach((key, values) {
+                  return key;
+                });
+
+                print(values['julio']['userId']);
+           
+*/
+                return ViewWidget(
+                  data: values,
+                );
+              }
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            })
       ],
     ));
   }

@@ -1,6 +1,12 @@
+import 'package:Electrikapp/class/graph.dart';
+import 'package:Electrikapp/models/dataFetoCardia.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class ViewWidget extends StatefulWidget {
+  final Map<dynamic, dynamic> data;
+
+  const ViewWidget({Key key, this.data}) : super(key: key);
   @override
   State<StatefulWidget> createState() => _ViewWidget();
 }
@@ -34,14 +40,23 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   Widget _graph() {
+    var lst = new List<double>(3);
+    lst[0] = 12;
+    // final Map<dynamic, dynamic> y = widget.data['1234567']['userId'];
+    // print(y);
+    //lst[1] = widget.data['1234567']['userId'];
+    lst[2] = 11;
     return Container(
-      height: 100.0,
-      width: 100.0,
-      margin: EdgeInsets.all(20),
-      child: CircularProgressIndicator(
+      height: 200.0,
+      width: 200.0,
+      margin: EdgeInsets.all(1),
+      child: GraphWidget(
+        data: lst,
+      ) /*CircularProgressIndicator(
         strokeWidth: 20,
         value: 0.9,
-      ) /*GaugeChart.withSampleData() GraphWidget()*/,
+      ) GaugeChart.withSampleData() */
+      ,
     );
   }
 
@@ -80,7 +95,7 @@ class _ViewWidget extends State<ViewWidget> {
   Widget _list() {
     return Expanded(
         child: ListView.separated(
-      itemCount: 6,
+      itemCount: widget.data.keys.length,
       itemBuilder: (context, index) => Card(
         child: MaterialButton(
           onPressed: () {},
