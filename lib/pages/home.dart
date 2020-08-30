@@ -1,11 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:Electrikapp/class/circle.dart';
-import 'package:Electrikapp/class/graph.dart';
-import 'package:Electrikapp/models/dataFetoCardia.dart';
 import 'package:Electrikapp/pages/view.dart';
-import 'package:Electrikapp/services/auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -63,11 +56,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
-          onPressed: () {
-            writeData();
-          }),
+      floatingActionButton:
+          FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
       body: _body(),
     );
   }
@@ -82,15 +72,9 @@ class _HomePageState extends State<HomePage> {
             builder: (context, snapshat) {
               if (snapshat.hasData) {
                 var resq = snapshat.data.snapshot;
-                var name;
-                Map<dynamic, dynamic> values = resq.value;
-                /*     var key = values.forEach((key, values) {
-                  return key;
-                });
 
-                print(values['julio']['userId']);
-           
-*/
+                Map<dynamic, dynamic> values = resq.value;
+
                 return ViewWidget(
                   data: values,
                 );
@@ -101,6 +85,27 @@ class _HomePageState extends State<HomePage> {
             })
       ],
     ));
+  }
+
+  Widget _selector() {
+    return SizedBox.fromSize(
+      size: Size.fromHeight(70.0),
+      child: PageView(
+        onPageChanged: (newPage) {
+          setState(() {
+            currentPage = newPage;
+          });
+        },
+        controller: _controller,
+        children: <Widget>[
+          _pageItem('Vista Pesos', 0),
+          _pageItem('Vista KWH', 1),
+          // _pageItem('Vista Tres', 2),
+          // _pageItem('Vista Cuatro', 3),
+          // _pageItem('Vista Cinco', 4),
+        ],
+      ),
+    );
   }
 
   Widget _pageItem(String name, int position) {
@@ -129,30 +134,5 @@ class _HomePageState extends State<HomePage> {
       ),
       alignment: _alignmet,
     );
-  }
-
-  Widget _selector() {
-    return SizedBox.fromSize(
-      size: Size.fromHeight(70.0),
-      child: PageView(
-        onPageChanged: (newPage) {
-          setState(() {
-            currentPage = newPage;
-          });
-        },
-        controller: _controller,
-        children: <Widget>[
-          _pageItem('Vista Pesos', 0),
-          _pageItem('Vista KWH', 1),
-          // _pageItem('Vista Tres', 2),
-          // _pageItem('Vista Cuatro', 3),
-          // _pageItem('Vista Cinco', 4),
-        ],
-      ),
-    );
-  }
-
-  void writeData() {
-    //DBRef.onChildAdded
   }
 }
