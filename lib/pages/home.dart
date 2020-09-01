@@ -1,4 +1,5 @@
 import 'package:Electrikapp/pages/view.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -106,25 +107,32 @@ class _HomePageState extends State<HomePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
+                  future: Connectivity().checkConnectivity(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return Center(
-                  heightFactor: 2,
-                  child: CircularProgressIndicator(),
-                );
-              })
-              /*Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      _deviceField(customController, Icons.wifi, 'Red'),
-                      _deviceField(customController, Icons.device_unknown,
-                          'Dispositivo'),
-                      _deviceField(customController, Icons.group, 'Grupo'),
-                    ],
-                  ),
-                ),
-              )*/
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        heightFactor: 2,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      print(snapshot);
+                      return Container(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              _deviceField(customController, Icons.wifi, 'Red'),
+                              _deviceField(customController,
+                                  Icons.device_unknown, 'Dispositivo'),
+                              _deviceField(
+                                  customController, Icons.group, 'Grupo'),
+                            ],
+                          ),
+                        ),
+                      );
+                    }
+                  })
+              /**/
               );
         });
   }
