@@ -56,10 +56,77 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton:
-          FloatingActionButton(child: Icon(Icons.add), onPressed: () {}),
+      floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          onPressed: () {
+            showMyDialog(context).then((value) => {print(value)});
+          }),
       body: _body(),
     );
+  }
+
+  Widget _deviceField(
+      TextEditingController customController, IconData icon, String name) {
+    ///String name = 'Hola Mundo';
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          //Crear Widget para campos
+          new TextFormField(
+            //controller: password,
+            decoration: new InputDecoration(icon: Icon(icon), labelText: name),
+            autocorrect: false,
+            obscureText: true,
+          )
+        ],
+      ),
+    );
+  }
+
+  Future<String> showMyDialog(BuildContext context) {
+    TextEditingController customController = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                MaterialButton(
+                  elevation: 0.5,
+                  child: Text('Sublie'),
+                  onPressed: () {
+                    Navigator.of(context).pop(customController.text.toString());
+                  },
+                )
+              ],
+              contentPadding: EdgeInsets.only(left: 25, right: 25),
+              title: Center(child: Text("Agrega Dispositivo...")),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              content: FutureBuilder(
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Center(
+                  heightFactor: 2,
+                  child: CircularProgressIndicator(),
+                );
+              })
+              /*Container(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      _deviceField(customController, Icons.wifi, 'Red'),
+                      _deviceField(customController, Icons.device_unknown,
+                          'Dispositivo'),
+                      _deviceField(customController, Icons.group, 'Grupo'),
+                    ],
+                  ),
+                ),
+              )*/
+              );
+        });
   }
 
   Widget _body() {

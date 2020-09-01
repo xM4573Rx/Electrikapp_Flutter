@@ -17,7 +17,7 @@ class _ViewWidget extends State<ViewWidget> {
     // TODO: implement build
     return Expanded(
         child: Column(
-      children: <Widget>[_expenses(), _graph(), _list()],
+      children: <Widget>[_expenses(), /* _graph(),*/ _list()],
     ));
   }
 
@@ -47,8 +47,8 @@ class _ViewWidget extends State<ViewWidget> {
     //lst[1] = widget.data['1234567']['userId'];
     lst[2] = 11;
     return Container(
-      height: 200.0,
-      width: 200.0,
+      height: 150.0,
+      width: 300.0,
       margin: EdgeInsets.all(1),
       child: GraphWidget(
         data: lst,
