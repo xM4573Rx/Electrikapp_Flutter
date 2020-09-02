@@ -2,6 +2,7 @@ import 'package:Electrikapp/pages/view.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:wifi/wifi.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -87,6 +88,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+//Atender warning
+  Future<WifiState> connection() async {
+    return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
+      return v;
+    });
+  }
+
   Future<String> showMyDialog(BuildContext context) {
     TextEditingController customController = TextEditingController();
     return showDialog(
@@ -107,7 +115,8 @@ class _HomePageState extends State<HomePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: Connectivity().checkConnectivity(),
+                  //Solucionar
+                  future: connection(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
@@ -115,21 +124,38 @@ class _HomePageState extends State<HomePage> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      print(snapshot);
-                      return Container(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: <Widget>[
-                              _deviceField(customController, Icons.wifi, 'Red'),
-                              _deviceField(customController,
-                                  Icons.device_unknown, 'Dispositivo'),
-                              _deviceField(
-                                  customController, Icons.group, 'Grupo'),
-                            ],
+                      print('____________________________');
+                      print(snapshot.data);
+                      print('____________________________');
+                      if (snapshot.data == WifiState.success) {
+                        return Container(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                _deviceField(
+                                    customController, Icons.wifi, 'Red'),
+                                _deviceField(customController,
+                                    Icons.device_unknown, 'Dispositivo'),
+                                _deviceField(
+                                    customController, Icons.group, 'Grupo'),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
+                        );
+                      } else {
+                        return Container(
+                          height: 100,
+                          child: Center(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.sentiment_dissatisfied),
+                                Text('Dispositivo no valido para configurar')
+                              ],
+                            ),
+                          ),
+                        );
+                      }
                     }
                   })
               /**/
