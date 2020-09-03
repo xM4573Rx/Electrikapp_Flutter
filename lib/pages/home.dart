@@ -91,7 +91,7 @@ class _HomePageState extends State<HomePage> {
 
 //Atender warning
   Future<Null> connection() async {
-    return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
+    Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
       print(v);
     });
   }
