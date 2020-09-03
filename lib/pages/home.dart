@@ -61,7 +61,8 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            showMyDialog(context).then((value) => {print(value)});
+            connection();
+            //showMyDialog(context).then((value) => {print(value)});
           }),
       body: _body(),
     );
@@ -89,9 +90,9 @@ class _HomePageState extends State<HomePage> {
   }
 
 //Atender warning
-  Future<WifiState> connection() async {
+  Future<Null> connection() async {
     return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
-      return v;
+      print(v);
     });
   }
 
