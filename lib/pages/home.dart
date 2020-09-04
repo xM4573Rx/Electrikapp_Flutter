@@ -3,6 +3,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
+import 'package:wifi_configuration/wifi_configuration.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -90,10 +91,13 @@ class _HomePageState extends State<HomePage> {
   }
 
 //Atender warning
-  Future<Null> connection() async {
-    Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
-      print(v);
-    });
+  Future<WifiConnectionStatus> connection() async {
+    print('__________________________');
+    Wifi.list('').then((value) => {print(value)});
+    WifiConnectionStatus connectionStatus =
+        await WifiConfiguration.connectToWifi(
+            'DTVNET_00D808', '0bhtp9hl', "com.example.Electrikapp");
+    return connectionStatus;
   }
 
   Future<String> showMyDialog(BuildContext context) {
