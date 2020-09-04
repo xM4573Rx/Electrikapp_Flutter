@@ -3,7 +3,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
-import 'package:wifi_configuration/wifi_configuration.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -17,10 +16,6 @@ class _HomePageState extends State<HomePage> {
   DatabaseReference dBRef =
       FirebaseDatabase.instance.reference().child('dataMedico');
 
-//  StreamSubscription<Event> _onChildAdded;
-//  StreamSubscription<Event> _onChildChanged;
-//  StreamSubscription<Event> _onChildMoved;
-//  StreamSubscription<Event> _onChildRemoved;
   @override
   void initState() {
     // TODO: implement initState
@@ -62,8 +57,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            connection();
-            //showMyDialog(context).then((value) => {print(value)});
+            showMyDialog(context).then((value) => {print(value)});
           }),
       body: _body(),
     );
@@ -71,9 +65,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _deviceField(
       TextEditingController customController, IconData icon, String name) {
-    ///String name = 'Hola Mundo';
     return Container(
-      margin: EdgeInsets.all(8),
+      margin: EdgeInsets.all(5),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -90,14 +83,10 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//Atender warning
-  Future<WifiConnectionStatus> connection() async {
-    print('__________________________');
-    Wifi.list('').then((value) => {print(value)});
-    WifiConnectionStatus connectionStatus =
-        await WifiConfiguration.connectToWifi(
-            'DTVNET_00D808', '0bhtp9hl', "com.example.Electrikapp");
-    return connectionStatus;
+  Future<WifiState> connection() async {
+    return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
+      return v;
+    });
   }
 
   Future<String> showMyDialog(BuildContext context) {
@@ -109,7 +98,7 @@ class _HomePageState extends State<HomePage> {
               actions: <Widget>[
                 MaterialButton(
                   elevation: 0.5,
-                  child: Text('Sublie'),
+                  child: Text('Agregar'),
                   onPressed: () {
                     Navigator.of(context).pop(customController.text.toString());
                   },
@@ -120,7 +109,6 @@ class _HomePageState extends State<HomePage> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  //Solucionar
                   future: connection(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -129,9 +117,6 @@ class _HomePageState extends State<HomePage> {
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      print('____________________________');
-                      print(snapshot.data);
-                      print('____________________________');
                       if (snapshot.data == WifiState.success) {
                         return Container(
                           child: SingleChildScrollView(
@@ -140,10 +125,10 @@ class _HomePageState extends State<HomePage> {
                               children: <Widget>[
                                 _deviceField(
                                     customController, Icons.wifi, 'Red'),
-                                _deviceField(customController,
-                                    Icons.device_unknown, 'Dispositivo'),
                                 _deviceField(
-                                    customController, Icons.group, 'Grupo'),
+                                    customController, Icons.lock, 'Contraseña'),
+                                _deviceField(customController,
+                                    Icons.device_unknown, 'Nombre Dispositivo'),
                               ],
                             ),
                           ),
@@ -162,9 +147,7 @@ class _HomePageState extends State<HomePage> {
                         );
                       }
                     }
-                  })
-              /**/
-              );
+                  }));
         });
   }
 
@@ -206,9 +189,6 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           _pageItem('Vista Pesos', 0),
           _pageItem('Vista KWH', 1),
-          // _pageItem('Vista Tres', 2),
-          // _pageItem('Vista Cuatro', 3),
-          // _pageItem('Vista Cinco', 4),
         ],
       ),
     );
