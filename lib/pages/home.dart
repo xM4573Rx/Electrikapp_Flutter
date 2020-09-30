@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<WifiState> connection() async {
     return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
-      return v;
+      return WifiState.success;
     });
   }
 

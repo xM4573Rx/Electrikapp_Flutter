@@ -17,7 +17,11 @@ class _ViewWidget extends State<ViewWidget> {
     // TODO: implement build
     return Expanded(
         child: Column(
-      children: <Widget>[_expenses(), /* _graph(),*/ _list()],
+      children: <Widget>[
+        _expenses(),
+        /*_graph()*/ CircularProgressIndicator(),
+        _list()
+      ],
     ));
   }
 
@@ -40,12 +44,16 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   Widget _graph() {
-    var lst = new List<double>(3);
+    var lst = new List<double>(5);
     lst[0] = 12;
-    // final Map<dynamic, dynamic> y = widget.data['1234567']['userId'];
-    // print(y);
-    //lst[1] = widget.data['1234567']['userId'];
+    final double y = widget.data['1234567']['userId'];
+    final double y1 = widget.data['otro']['userId'];
+    final double y2 = widget.data['otromas']['userId'];
+    print(y);
+    lst[1] = y;
     lst[2] = 11;
+    lst[3] = y1;
+    lst[4] = y2;
     return Container(
       height: 150.0,
       width: 300.0,
