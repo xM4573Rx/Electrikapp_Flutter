@@ -1,9 +1,8 @@
-import 'package:Electrikapp/services/auth.dart';
+import 'package:Electrikapp/models/login_state.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({Key key, this.onLoginSuccess}) : super(key: key);
-  final Function onLoginSuccess;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -11,7 +10,8 @@ class LoginPage extends StatelessWidget {
         child: RaisedButton(
           child: Text('LOGIN'),
           onPressed: () {
-            onLoginSuccess();
+            //Provider.of<LoginState>(context).login();
+            Provider.of<LoginState>(context, listen: false).login();
           },
         ),
       ),

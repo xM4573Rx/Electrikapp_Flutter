@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return ChangeNotifierProvider<LoginState>(
-      builder: (BuildContext context) => LoginState(),
+      create: (context) => LoginState(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'FetoCardia',
@@ -20,17 +20,12 @@ class MyApp extends StatelessWidget {
             title: 'Hola',
           ),*/
         routes: {
-          '/': (BuildContext contex) {
-            if (_loggedIn) {
+          '/': (BuildContext context) {
+            var state = Provider.of<LoginState>(context, listen: true);
+            if (state.loggedIn) {
               return HomePage();
             } else {
-              return LoginPage(
-                onLoginSuccess: () {
-                  setState(() {
-                    _loggedIn = true;
-                  });
-                },
-              );
+              return LoginPage();
             }
           },
         },

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class LoginState with ChangeNotifier {
   bool _loggedIn = false;
-  void login() {
+
+  bool get loggedIn => _loggedIn;
+  void login() async {
     _loggedIn = true;
     notifyListeners();
   }

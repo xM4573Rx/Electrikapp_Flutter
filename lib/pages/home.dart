@@ -1,7 +1,9 @@
+import 'package:Electrikapp/models/login_state.dart';
 import 'package:Electrikapp/pages/view.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wifi/wifi.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,10 +27,10 @@ class _HomePageState extends State<HomePage> {
         PageController(initialPage: currentPage, viewportFraction: 0.4);
   }
 
-  Widget _bottomAction(IconData icon) {
+  Widget _bottomAction(IconData icon, Function callback) {
     return InkWell(
       child: Padding(padding: const EdgeInsets.all(8.0), child: Icon(icon)),
-      onTap: () {},
+      onTap: callback,
     );
   }
 
@@ -43,13 +45,15 @@ class _HomePageState extends State<HomePage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            _bottomAction(Icons.history),
-            _bottomAction(Icons.alarm),
+            _bottomAction(Icons.history, () {}),
+            _bottomAction(Icons.alarm, () {}),
             SizedBox(
               width: 48.0,
             ),
-            _bottomAction(Icons.file_download),
-            _bottomAction(Icons.settings),
+            _bottomAction(Icons.file_download, () {}),
+            _bottomAction(Icons.settings, () {
+              Provider.of<LoginState>(context, listen: false).logout();
+            }),
           ],
         ),
       ),
