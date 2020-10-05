@@ -6,15 +6,20 @@ class AuthFireBase {
   GoogleSignIn _googleSignIn = GoogleSignIn();
 
   Future<AuthResult> signInGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
 
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-        idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+          idToken: googleAuth.idToken, accessToken: googleAuth.accessToken);
 
-    final AuthResult user = await firebaseAuth.signInWithCredential(credential);
-    return user;
+      final AuthResult user =
+          await firebaseAuth.signInWithCredential(credential);
+      return user;
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<String> signIn(String email, String password) async {
