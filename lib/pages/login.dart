@@ -42,7 +42,18 @@ class LoginPage extends StatelessWidget {
                 padding: EdgeInsets.all(20),
                 child: Form(
                     child: Column(
-                  children: [],
+                  children: [
+                    TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.person), labelText: 'Correo'),
+                      autocorrect: false,
+                    ),
+                    TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.person), labelText: 'Correo'),
+                      autocorrect: false,
+                    )
+                  ],
                 )),
               )
             ],
