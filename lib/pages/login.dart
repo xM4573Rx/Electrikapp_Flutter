@@ -7,11 +7,19 @@ final String logoElectrikApp = 'assets/images/ElectrikApp-Logo.svg';
 final String logoFacebook = 'assets/images/Logo-Facebook.svg';
 final String logoGoogle = 'assets/images/Logo-Google.svg';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      appBar: new AppBar(
+        title: new Text('Login'),
+      ),
+      body: SingleChildScrollView(
         child: Consumer<LoginState>(
           builder: (context, value, child) {
             if (value.loading) {
