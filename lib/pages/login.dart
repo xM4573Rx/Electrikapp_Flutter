@@ -1,6 +1,9 @@
 import 'package:Electrikapp/models/login_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+
+final String assetName = 'assets/images/ElectrikApp-Logo.svg';
 
 class LoginPage extends StatelessWidget {
   @override
@@ -15,11 +18,34 @@ class LoginPage extends StatelessWidget {
               return child;
             }
           },
-          child: RaisedButton(
-            child: Text('LOGIN'),
-            onPressed: () {
-              Provider.of<LoginState>(context, listen: false).login();
-            },
+          child: ListView(
+            children: [
+              /*
+              SvgPicture.string(
+                'assets/images/ElectrikApp-Logo.svg',
+                height: 100,
+                width: 100,
+              ),
+              RaisedButton(
+                child: Text('Hola..'),
+                onPressed: () {
+                  Provider.of<LoginState>(context, listen: false).login();
+                },
+              )
+            */
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: SvgPicture.asset(assetName,
+                    width: 200, color: Colors.blueAccent),
+              ),
+              Padding(
+                padding: EdgeInsets.all(20),
+                child: Form(
+                    child: Column(
+                  children: [],
+                )),
+              )
+            ],
           ),
         ),
       ),
