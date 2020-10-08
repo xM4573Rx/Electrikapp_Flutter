@@ -19,46 +19,51 @@ class _LoginPageState extends State<LoginPage> {
       appBar: new AppBar(
         title: new Text('Login'),
       ),
-      body: Consumer<LoginState>(
-        builder: (context, value, child) {
-          if (value.loading) {
-            return CircularProgressIndicator();
-          } else {
-            return child;
-          }
-        },
-        child: ListView(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: SvgPicture.asset(logoElectrikApp, width: 150),
-            ),
-            Padding(
-              padding: EdgeInsets.all(20),
-              child: formLogin(context),
-            ),
-            Padding(
-              padding: EdgeInsets.all(40),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text('Usuario Nuevo?'),
-                    color: Colors.blueAccent.withOpacity(0.2),
+      body: Center(
+        child: Consumer<LoginState>(
+          builder: (context, value, child) {
+            if (value.loading) {
+              return CircularProgressIndicator();
+            } else {
+              return child;
+            }
+          },
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.all(10),
+                  child: SvgPicture.asset(logoElectrikApp, width: 150),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: formLogin(context),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(40),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      FlatButton(
+                        onPressed: () {},
+                        child: Text('Usuario Nuevo?'),
+                        color: Colors.blueAccent.withOpacity(0.2),
+                      ),
+                      // SvgPicture.asset(logoFacebook, width: 40),
+                      FlatButton(
+                        child: SvgPicture.asset(logoGoogle, width: 20),
+                        onPressed: () {
+                          Provider.of<LoginState>(context, listen: false)
+                              .login();
+                        },
+                      )
+                    ],
                   ),
-                  // SvgPicture.asset(logoFacebook, width: 40),
-                  FlatButton(
-                    child: SvgPicture.asset(logoGoogle, width: 20),
-                    onPressed: () {
-                      Provider.of<LoginState>(context, listen: false).login();
-                    },
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
