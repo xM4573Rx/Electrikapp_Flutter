@@ -12,7 +12,10 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+bool user = true;
+
 class _LoginPageState extends State<LoginPage> {
+  //FormType formType = FormType.login;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,22 +40,26 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Padding(
                   padding: EdgeInsets.all(20),
-                  child: formLogin(context),
+                  child: formLogin(context, user),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(40),
+                  padding: EdgeInsets.all(10),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FlatButton(
-                        onPressed: () {},
-                        child: Text('Usuario Nuevo?'),
+                        onPressed: () {
+                          setState(() {
+                            user = !user;
+                          });
+                        },
+                        child: bottom(user),
                         color: Colors.blueAccent.withOpacity(0.2),
                       ),
                       // SvgPicture.asset(logoFacebook, width: 40),
                       FlatButton(
-                        child: SvgPicture.asset(logoGoogle, width: 20),
+                        child: SvgPicture.asset(logoGoogle, width: 50),
                         onPressed: () {
                           Provider.of<LoginState>(context, listen: false)
                               .login();
@@ -69,47 +76,112 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget formLogin(BuildContext context) {
-    return Form(
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.blueAccent.withOpacity(0.2),
-            borderRadius: BorderRadius.circular(10.0)),
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: new InputDecoration(
-                      icon: Icon(Icons.person), labelText: 'Correo'),
-                  autocorrect: false,
-                ),
+  Widget bottom(bool user) {
+    switch (user) {
+      case true:
+        return Text('Ya eres usuario?');
+      case false:
+        return Text('Usuario nuevo?');
+    }
+    return null;
+  }
+
+  Widget formLogin(BuildContext context, bool user) {
+    switch (user) {
+      case false:
+        return Form(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.blueAccent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.person), labelText: 'Usuario'),
+                      autocorrect: false,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.lock), labelText: 'Contraseña'),
+                      autocorrect: false,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: FlatButton(
+                      color: Colors.white,
+                      child: Text('Ingresar'),
+                      onPressed: () {
+                        // Provider.of<LoginState>(context, listen: false).login();
+                      },
+                    ),
+                  )
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: TextFormField(
-                  decoration: new InputDecoration(
-                      icon: Icon(Icons.lock), labelText: 'Contraseña'),
-                  autocorrect: false,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: FlatButton(
-                  color: Colors.white,
-                  child: Text('Ingresar'),
-                  onPressed: () {
-                    // Provider.of<LoginState>(context, listen: false).login();
-                  },
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
+
+      case true:
+        return Form(
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.blueAccent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Padding(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.person), labelText: 'Usuario'),
+                      autocorrect: false,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.mail), labelText: 'Correo'),
+                      autocorrect: false,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: TextFormField(
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.lock), labelText: 'Contraseña'),
+                      autocorrect: false,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(5),
+                    child: FlatButton(
+                      color: Colors.white,
+                      child: Text('Registrarme'),
+                      onPressed: () {
+                        // Provider.of<LoginState>(context, listen: false).login();
+                      },
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+        );
+      default:
+        return null;
+    }
   }
 }
 

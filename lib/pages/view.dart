@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:Electrikapp/class/graph.dart';
 import 'package:Electrikapp/models/dataFetoCardia.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ViewWidget extends StatefulWidget {
@@ -68,7 +71,10 @@ class _ViewWidget extends State<ViewWidget> {
     );
   }
 
-  Widget _item(IconData icon, String name, int porcent, double value) {
+  Widget _item(IconData icon, String name, var _value) {
+    Map<dynamic, dynamic> porcent = _value['Datos'];
+    num energia = porcent['Energia'];
+    num potencia = porcent['Potencia'];
     return Padding(
       padding: const EdgeInsets.all(1),
       child: ListTile(
@@ -81,7 +87,7 @@ class _ViewWidget extends State<ViewWidget> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         subtitle: Text(
-          '$porcent% of expenses',
+          '$energia KWH',
           style: TextStyle(fontSize: 16.0, color: Colors.blueGrey),
         ),
         trailing: Container(
@@ -91,7 +97,7 @@ class _ViewWidget extends State<ViewWidget> {
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Text(
-              '\$$value',
+              '$potencia KW',
               style: TextStyle(color: Colors.blueAccent),
             ),
           ),
@@ -101,13 +107,21 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   Widget _list() {
+    Iterable key = widget.data.keys;
+    List _key = key.toList();
+    print(_key);
+
+    Iterable value = widget.data.values;
+    List _value = value.toList();
+    print(_value);
+    //print(_list[0]);
     return Expanded(
         child: ListView.separated(
       itemCount: widget.data.keys.length,
       itemBuilder: (context, index) => Card(
         child: MaterialButton(
           onPressed: () {},
-          child: _item(Icons.ac_unit, 'Agua', 20, 23),
+          child: _item(Icons.house, _key[index], _value[index]),
         ),
       ),
       /*_item(Icons.phone_android, 'Shopping', 14, 145.12)*/
