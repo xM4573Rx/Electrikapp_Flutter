@@ -1,19 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 
-class DeviceFild extends StatefulWidget {
-  DeviceFild({Key key}) : super(key: key);
-
-  @override
-  _DeviceFildState createState() => _DeviceFildState();
-}
-
-class _DeviceFildState extends State<DeviceFild> {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: null,
-    );
+class DeviceFild {
+  BuildContext context;
+  DeviceFild(BuildContext context) {
+    this.context = context;
   }
 
   Widget _deviceField(
@@ -42,18 +33,23 @@ class _DeviceFildState extends State<DeviceFild> {
     });
   }
 
-  Future<Widget> showMyDialog(BuildContext context) {
+  Future<dynamic> showMyDialog() {
     TextEditingController customController = TextEditingController();
-    showDialog(
+    return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
               actions: <Widget>[
-                MaterialButton(
-                  elevation: 0.5,
+                FlatButton(
                   child: Text('Agregar'),
                   onPressed: () {
-                    Navigator.of(context).pop(customController.text.toString());
+                    Navigator.of(context).pop(['1', '2']);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop('Cancelar');
                   },
                 )
               ],
@@ -101,7 +97,6 @@ class _DeviceFildState extends State<DeviceFild> {
                       }
                     }
                   }));
-        }).then((value) => print(value));
-    return null;
+        });
   }
 }

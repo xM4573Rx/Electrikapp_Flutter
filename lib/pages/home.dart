@@ -1,3 +1,4 @@
+import 'package:Electrikapp/class/deviceFild.dart';
 import 'package:Electrikapp/models/login_state.dart';
 import 'package:Electrikapp/pages/view.dart';
 import 'package:connectivity/connectivity.dart';
@@ -61,6 +62,10 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
+            print(DeviceFild(context)
+                .showMyDialog()
+                .then((value) => print(value[0])));
+
             // showMyDialog(context);
           }),
       body: _body(),
