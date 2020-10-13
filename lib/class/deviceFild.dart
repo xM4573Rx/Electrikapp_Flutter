@@ -27,13 +27,22 @@ class DeviceFild {
     );
   }
 
-  Future<WifiState> connection() async {
-    return Wifi.connection('DTVNET_00D808', '0bhtp9hl').then((v) {
-      return WifiState.success;
+  Future<dynamic> connectio() async {
+    return Wifi.connection('FLIA.RODRIGUEZ.BUELVAS', 'RAJUAL18').then((v) {
+      return v;
     });
   }
 
+  Future<Null> _getWifiName() async {
+    int l = await Wifi.level;
+    String wifiName = await Wifi.ssid;
+
+    print(l);
+    print(wifiName);
+  }
+
   Future<dynamic> showMyDialog() {
+    _getWifiName();
     TextEditingController customController = TextEditingController();
     return showDialog(
         context: context,
@@ -58,14 +67,16 @@ class DeviceFild {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: connection(),
+                  future: connectio(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    print(snapshot.data);
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         heightFactor: 2,
                         child: CircularProgressIndicator(),
                       );
                     } else {
+                      //print(snapshot.);
                       if (snapshot.data == WifiState.success) {
                         return Container(
                           child: SingleChildScrollView(
