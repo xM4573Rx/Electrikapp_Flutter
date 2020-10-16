@@ -1,15 +1,19 @@
 import 'package:Electrikapp/models/login_state.dart';
 import 'package:Electrikapp/pages/home.dart';
 import 'package:Electrikapp/pages/login.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wifi/wifi.dart';
 
 void main() => runApp(MyApp());
+String _wifiName = 'click button to get wifi ssid.';
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+
     return ChangeNotifierProvider<LoginState>(
       create: (context) => LoginState(),
       child: MaterialApp(
@@ -21,6 +25,7 @@ class MyApp extends StatelessWidget {
           ),*/
         routes: {
           '/': (BuildContext context) {
+            //showMyDialog(context);
             var state = Provider.of<LoginState>(context, listen: true);
             if (state.loggedIn) {
               return HomePage();

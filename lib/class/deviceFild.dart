@@ -7,8 +7,8 @@ class DeviceFild {
     this.context = context;
   }
 
-  Widget _deviceField(
-      TextEditingController customController, IconData icon, String name) {
+  Widget _deviceField(TextEditingController customController, IconData icon,
+      String name, String init) {
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -20,29 +20,107 @@ class DeviceFild {
             //controller: password,
             decoration: new InputDecoration(icon: Icon(icon), labelText: name),
             autocorrect: false,
-            obscureText: true,
+            obscureText: false, initialValue: init,
+            style: TextStyle(fontSize: null),
           )
         ],
       ),
     );
   }
 
-  Future<dynamic> connectio() async {
-    return Wifi.connection('FLIA.RODRIGUEZ.BUELVAS', 'RAJUAL18').then((v) {
+  Future<dynamic> connection() async {
+    // loadData();
+    return Wifi.connection('ElectrikAppCentral', '12345678').then((v) {
       return v;
     });
   }
 
-  Future<Null> _getWifiName() async {
-    int l = await Wifi.level;
-    String wifiName = await Wifi.ssid;
+  Future<String> _getWifiName() async {
+    // int l = await Wifi.level;
+    return Wifi.ssid.then((value) {
+      return value;
+    });
 
-    print(l);
-    print(wifiName);
+    //print(l);
+    //print(wifiName);
+  }
+
+  void loadData() async {
+    Wifi.list('').then((list) {
+      print(list);
+    });
   }
 
   Future<dynamic> showMyDialog() {
-    _getWifiName();
+    TextEditingController network = TextEditingController();
+    TextEditingController password = TextEditingController();
+    TextEditingController name = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Agregar'),
+                  onPressed: () {
+                    Navigator.of(context).pop([network.value, '2']);
+                  },
+                ),
+                FlatButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop('Cancelar');
+                  },
+                )
+              ],
+              contentPadding: EdgeInsets.only(left: 25, right: 25),
+              title: Center(child: Text("Agrega Dispositivo...")),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              content: FutureBuilder(
+                  future: _getWifiName(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        heightFactor: 2,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+                      if (snapshot.data != '<unknown ssid>') {
+                        return Container(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                _deviceField(
+                                    network, Icons.wifi, 'Red', snapshot.data),
+                                _deviceField(
+                                    password, Icons.lock, 'Contraseña', ''),
+                                _deviceField(name, Icons.device_unknown,
+                                    'Nombre Dispositivo', ''),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 100,
+                          child: Center(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.sentiment_dissatisfied),
+                                Text('Dispositivo no valido para configurar')
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  }));
+        });
+  }
+
+  Future<dynamic> showLoading() {
     TextEditingController customController = TextEditingController();
     return showDialog(
         context: context,
@@ -63,50 +141,16 @@ class DeviceFild {
                 )
               ],
               contentPadding: EdgeInsets.only(left: 25, right: 25),
-              title: Center(child: Text("Agrega Dispositivo...")),
+              title: Center(child: Text("Agregando...")),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: connectio(),
+                  future: _getWifiName(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    print(snapshot.data);
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        heightFactor: 2,
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      //print(snapshot.);
-                      if (snapshot.data == WifiState.success) {
-                        return Container(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                _deviceField(
-                                    customController, Icons.wifi, 'Red'),
-                                _deviceField(
-                                    customController, Icons.lock, 'Contraseña'),
-                                _deviceField(customController,
-                                    Icons.device_unknown, 'Nombre Dispositivo'),
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          height: 100,
-                          child: Center(
-                            child: Column(
-                              children: <Widget>[
-                                Icon(Icons.sentiment_dissatisfied),
-                                Text('Dispositivo no valido para configurar')
-                              ],
-                            ),
-                          ),
-                        );
-                      }
-                    }
+                    return Center(
+                      heightFactor: 2,
+                      child: CircularProgressIndicator(),
+                    );
                   }));
         });
   }

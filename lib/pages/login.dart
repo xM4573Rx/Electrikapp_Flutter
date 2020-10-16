@@ -2,6 +2,8 @@ import 'package:Electrikapp/models/login_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:wifi/wifi.dart';
+import 'package:flutter/services.dart';
 
 final String logoElectrikApp = 'assets/images/ElectrikApp-Logo.svg';
 final String logoFacebook = 'assets/images/Logo-Facebook.svg';
@@ -77,6 +79,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget bottom(bool user) {
+    //_getWifiName();
     switch (user) {
       case true:
         return Text('Ya eres usuario?');

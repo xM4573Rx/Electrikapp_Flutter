@@ -62,11 +62,10 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            print(DeviceFild(context)
-                .showMyDialog()
-                .then((value) => print(value[0])));
-
-            // showMyDialog(context);
+            DeviceFild(context).showMyDialog().then((value) {
+              print(value);
+              DeviceFild(context).showLoading();
+            });
           }),
       body: _body(),
     );
