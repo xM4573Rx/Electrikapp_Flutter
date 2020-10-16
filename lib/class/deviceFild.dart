@@ -3,6 +3,9 @@ import 'package:wifi/wifi.dart';
 
 class DeviceFild {
   BuildContext context;
+  var network = TextEditingController();
+  var password = TextEditingController();
+  var name = TextEditingController();
   DeviceFild(BuildContext context) {
     this.context = context;
   }
@@ -52,9 +55,7 @@ class DeviceFild {
   }
 
   Future<dynamic> showMyDialog() {
-    TextEditingController network = TextEditingController();
-    TextEditingController password = TextEditingController();
-    TextEditingController name = TextEditingController();
+    // var password = TextEditingController();
     return showDialog(
         context: context,
         builder: (context) {
@@ -63,7 +64,9 @@ class DeviceFild {
                 FlatButton(
                   child: Text('Agregar'),
                   onPressed: () {
-                    Navigator.of(context).pop([network.value, '2']);
+                    print('network.text.toString()');
+                    Navigator.of(context)
+                        .pop([network.text.toString(), name.text.toString()]);
                   },
                 ),
                 FlatButton(
