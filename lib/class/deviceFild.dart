@@ -10,8 +10,8 @@ class DeviceFild {
     this.context = context;
   }
 
-  Widget _deviceField(TextEditingController customController, IconData icon,
-      String name, String init) {
+  Widget _deviceField(
+      TextEditingController customController, IconData icon, String name) {
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -23,8 +23,8 @@ class DeviceFild {
             //controller: password,
             decoration: new InputDecoration(icon: Icon(icon), labelText: name),
             autocorrect: false,
-            obscureText: false, initialValue: init,
-            style: TextStyle(fontSize: null),
+            obscureText: false,
+            style: TextStyle(fontSize: null), controller: customController,
           )
         ],
       ),
@@ -83,6 +83,7 @@ class DeviceFild {
               content: FutureBuilder(
                   future: _getWifiName(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    network.text = snapshot.data;
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         heightFactor: 2,
@@ -95,12 +96,11 @@ class DeviceFild {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
+                                _deviceField(network, Icons.wifi, 'Red'),
                                 _deviceField(
-                                    network, Icons.wifi, 'Red', snapshot.data),
-                                _deviceField(
-                                    password, Icons.lock, 'Contraseña', ''),
+                                    password, Icons.lock, 'Contraseña'),
                                 _deviceField(name, Icons.device_unknown,
-                                    'Nombre Dispositivo', ''),
+                                    'Nombre Dispositivo'),
                               ],
                             ),
                           ),
