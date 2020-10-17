@@ -38,7 +38,7 @@ dependencies:
   wifi_configuration: 
   provider: 
   flutter_svg: 
-  http:
+  #http:
 
 
 dev_dependencies:

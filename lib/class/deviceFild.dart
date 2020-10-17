@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +34,7 @@ class DeviceFild {
     );
   }
 
-  Future<dynamic> connection() async {
+  Future<WifiState> connection() async {
     // loadData();
     return Wifi.connection('ElectrikAppCentral', '12345678').then((v) {
       return v;
@@ -82,16 +84,18 @@ class DeviceFild {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: _getWifiName(),
+                  future: connection(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    network.text = snapshot.data;
+                    network.text = 'Hola'; //snapshot.data.toString();
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         heightFactor: 2,
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      if (snapshot.data != '<unknown ssid>') {
+                      /*'<unknown ssid>'*/
+                      print(snapshot.data);
+                      if (snapshot.data != WifiState.success) {
                         return Container(
                           child: SingleChildScrollView(
                             child: Column(
@@ -177,8 +181,8 @@ class DeviceFild {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
-            _createDB();
-            return GroupsTwoPage();
+            //_createDB();
+            return null;
           },
         ),
       );
@@ -186,7 +190,7 @@ class DeviceFild {
       Navigator.of(context).push(
         MaterialPageRoute(
           builder: (context) {
-            return GroupsPage();
+            return null;
           },
         ),
       );

@@ -64,6 +64,7 @@ class _HomePageState extends State<HomePage> {
           onPressed: () {
             DeviceFild(context).showMyDialog().then((value) {
               print(value);
+              DeviceFild(context).sendData('data');
               DeviceFild(context).showLoading();
             });
           }),
