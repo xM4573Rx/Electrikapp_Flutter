@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
+import 'package:http/http.dart' as http;
 
 class DeviceFild {
   BuildContext context;
@@ -156,5 +157,39 @@ class DeviceFild {
                     );
                   }));
         });
+  }
+
+  Future<void> sendData(var data) async {
+    String url = 'http://192.168.4.1/data.json';
+    Map<String, String> headers = {"Content-type": "application/json"};
+
+    String _body = json.encode(data);
+    // String _body = data;
+
+    var response = await http.post(url, headers: headers, body: _body);
+
+    int statusCode = response.statusCode;
+    print(statusCode);
+    String body = response.body;
+    print(body);
+
+    if (statusCode == 200) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            _createDB();
+            return GroupsTwoPage();
+          },
+        ),
+      );
+    } else {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) {
+            return GroupsPage();
+          },
+        ),
+      );
+    }
   }
 }
