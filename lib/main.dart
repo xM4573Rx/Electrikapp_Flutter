@@ -10,10 +10,17 @@ void main() => runApp(MyApp());
 String _wifiName = 'click button to get wifi ssid.';
 
 class MyApp extends StatelessWidget {
+  Future<List<WifiResult>> loadData() async {
+    return Wifi.list('').then((list) {
+      print(list);
+      return list;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-
+    loadData();
     return ChangeNotifierProvider<LoginState>(
       create: (context) => LoginState(),
       child: MaterialApp(

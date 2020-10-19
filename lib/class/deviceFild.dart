@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 import 'package:http/http.dart' as http;
@@ -9,12 +10,13 @@ class DeviceFild {
   var network = TextEditingController();
   var password = TextEditingController();
   var name = TextEditingController();
+  var _data;
   DeviceFild(BuildContext context) {
     this.context = context;
   }
 
   Widget _deviceField(
-      TextEditingController customController, IconData icon, String name) {
+      TextEditingController customController, IconData icon, String name, bool obscureText) {
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -26,7 +28,7 @@ class DeviceFild {
             //controller: password,
             decoration: new InputDecoration(icon: Icon(icon), labelText: name),
             autocorrect: false,
-            obscureText: false,
+            obscureText: obscureText,
             style: TextStyle(fontSize: null), controller: customController,
           )
         ],
@@ -44,6 +46,7 @@ class DeviceFild {
   Future<String> _getWifiName() async {
     // int l = await Wifi.level;
     return Wifi.ssid.then((value) {
+      print(value);
       return value;
     });
 
@@ -51,12 +54,12 @@ class DeviceFild {
     //print(wifiName);
   }
 
-  void loadData() async {
-    Wifi.list('').then((list) {
-      print(list);
+  Future<List<WifiResult>> loadData() async {
+    return Wifi.list('').then((list) {
+      print( list);
+      return list;
     });
   }
-
   Future<dynamic> showMyDialog() {
     // var password = TextEditingController();
     return showDialog(
@@ -84,28 +87,28 @@ class DeviceFild {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: connection(),
+                  future: _getWifiName(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    network.text = 'Hola'; //snapshot.data.toString();
-                    if (snapshot.connectionState == ConnectionState.waiting) {
+                    network.text = snapshot.data;
+                    if (snapshot.connectionState ==  ConnectionState.waiting) {
                       return Center(
                         heightFactor: 2,
                         child: CircularProgressIndicator(),
                       );
                     } else {
                       /*'<unknown ssid>'*/
-                      print(snapshot.data);
-                      if (snapshot.data != WifiState.success) {
+                     // print(snapshot.data);
+                      if (snapshot.data != '<unknown ssid>') {
                         return Container(
                           child: SingleChildScrollView(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
-                                _deviceField(network, Icons.wifi, 'Red'),
+                                _deviceField(network, Icons.wifi, 'Red', false),
                                 _deviceField(
-                                    password, Icons.lock, 'Contraseña'),
+                                    password, Icons.lock, 'Contraseña',true),
                                 _deviceField(name, Icons.device_unknown,
-                                    'Nombre Dispositivo'),
+                                    'Nombre Dispositivo',false),
                               ],
                             ),
                           ),
@@ -117,7 +120,7 @@ class DeviceFild {
                             child: Column(
                               children: <Widget>[
                                 Icon(Icons.sentiment_dissatisfied),
-                                Text('Dispositivo no valido para configurar')
+                                Text('\nSin red WIFI disponible')
                               ],
                             ),
                           ),
@@ -129,7 +132,7 @@ class DeviceFild {
   }
 
   Future<dynamic> showLoading() {
-    TextEditingController customController = TextEditingController();
+    // var password = TextEditingController();
     return showDialog(
         context: context,
         builder: (context) {
@@ -138,7 +141,9 @@ class DeviceFild {
                 FlatButton(
                   child: Text('Agregar'),
                   onPressed: () {
-                    Navigator.of(context).pop(['1', '2']);
+                    print('network.text.toString()');
+                    Navigator.of(context)
+                        .pop([network.text.toString(), name.text.toString()]);
                   },
                 ),
                 FlatButton(
@@ -149,21 +154,53 @@ class DeviceFild {
                 )
               ],
               contentPadding: EdgeInsets.only(left: 25, right: 25),
-              title: Center(child: Text("Agregando...")),
+              title: Center(child: Text("Agrega Dispositivo...")),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(20.0))),
               content: FutureBuilder(
-                  future: _getWifiName(),
+                  future: loadData(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return Center(
-                      heightFactor: 2,
-                      child: CircularProgressIndicator(),
-                    );
+                   // network.text = snapshot.data;
+                   // print(snapshot.data);
+                    if (snapshot.connectionState ==  ConnectionState.waiting) {
+                      return Center(
+                        heightFactor: 2,
+                        child: CircularProgressIndicator(),
+                      );
+                    } else {
+
+                    //  print(snapshot.data);
+                      if (snapshot.data == WifiState.success) {
+                        return Container(
+                          child: SingleChildScrollView(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                Text('Cancelar')
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          height: 100,
+                          child: Center(
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.sentiment_dissatisfied),
+                                Text('\nSin dispositivo valido')
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    }
                   }));
         });
   }
 
   Future<void> sendData(var data) async {
+    _data = {'Red': '_net', 'Pass': '_pass', 'Name': '_groupName'};
     String url = 'http://192.168.4.1/data.json';
     Map<String, String> headers = {"Content-type": "application/json"};
 
@@ -178,22 +215,11 @@ class DeviceFild {
     print(body);
 
     if (statusCode == 200) {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            //_createDB();
-            return null;
-          },
-        ),
-      );
+      Navigator.of(context)
+          .pop([network.text.toString(), 'else']);
     } else {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) {
-            return null;
-          },
-        ),
-      );
+      Navigator.of(context)
+          .pop([network.text.toString(), 'if']);
     }
   }
 }
