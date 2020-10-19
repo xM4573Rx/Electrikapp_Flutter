@@ -5,6 +5,9 @@ import 'package:Electrikapp/models/dataFetoCardia.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:wifi/wifi.dart';
+
+List<WifiResult> ssidList = [];
 
 class ViewWidget extends StatefulWidget {
   final Map<dynamic, dynamic> data;
@@ -29,6 +32,7 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   Widget _expenses() {
+    loadData();
     return Column(
       children: <Widget>[
         Text(
@@ -133,5 +137,15 @@ class _ViewWidget extends State<ViewWidget> {
         );
       },
     ));
+  }
+
+  void loadData() async {
+    Wifi.list('').then((list) {
+      setState(() {
+        ssidList = list;
+
+        print(ssidList);
+      });
+    });
   }
 }
