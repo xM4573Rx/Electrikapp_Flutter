@@ -20,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   //FormType formType = FormType.login;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: new AppBar(
         title: new Text('Login'),
@@ -27,6 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: Consumer<LoginState>(
           builder: (context, value, child) {
+           // showLoading(context);
             if (value.loading) {
               return CircularProgressIndicator();
             } else {
@@ -63,6 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                       FlatButton(
                         child: SvgPicture.asset(logoGoogle, width: 50),
                         onPressed: () {
+                          showLoading(context);
                           Provider.of<LoginState>(context, listen: false)
                               .login();
                         },
@@ -185,6 +188,30 @@ class _LoginPageState extends State<LoginPage> {
       default:
         return null;
     }
+  }
+  Future<dynamic> showLoading(BuildContext context) {
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    print('network.text.toString()');
+                    Navigator.of(context)
+                        .pop([1,2]);
+                  },
+                ),
+
+              ],
+              contentPadding: EdgeInsets.only(left: 25, right: 25),
+              title: Center(child: Text("Recomendación...")),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              content: Text('\nPara mejor uso, active su ubicación'));
+        });
   }
 }
 

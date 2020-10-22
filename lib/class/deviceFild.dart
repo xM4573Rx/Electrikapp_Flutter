@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 import 'package:http/http.dart' as http;
@@ -15,8 +14,8 @@ class DeviceFild {
     this.context = context;
   }
 
-  Widget _deviceField(
-      TextEditingController customController, IconData icon, String name, bool obscureText) {
+  Widget _deviceField(TextEditingController customController, IconData icon,
+      String name, bool obscureText) {
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -36,17 +35,24 @@ class DeviceFild {
     );
   }
 
-  Future<WifiState> connection() async {
-    // loadData();
-    return Wifi.connection('ElectrikAppCentral', '12345678').then((v) {
+  Future<String> connection() async {
+    var data1;
+    while(data1!='ElectrikAppCentral'){
+    var data= await Wifi.connection('ElectrikAppCentral', '12345678').then((v) {
       return v;
     });
+    //print(data);
+    data1= await _getWifiName();
+    //print(data1);
+
+    }
+    return data1;
   }
 
   Future<String> _getWifiName() async {
     // int l = await Wifi.level;
     return Wifi.ssid.then((value) {
-      print(value);
+     // print(value);
       return value;
     });
 
@@ -56,13 +62,15 @@ class DeviceFild {
 
   Future<List<WifiResult>> loadData() async {
     return Wifi.list('').then((list) {
-      print( list);
+      // print(list.iterator.);
       return list;
     });
   }
-  Future<dynamic> showMyDialog() {
+
+  Future<dynamic> configureFild() {
     // var password = TextEditingController();
     return showDialog(
+        barrierDismissible: false,
         context: context,
         builder: (context) {
           return AlertDialog(
@@ -71,8 +79,11 @@ class DeviceFild {
                   child: Text('Agregar'),
                   onPressed: () {
                     print('network.text.toString()');
-                    Navigator.of(context)
-                        .pop([network.text.toString(), name.text.toString()]);
+                    Navigator.of(context).pop([
+                      network.text.toString(),
+                      password.text.toString(),
+                      name.text.toString()
+                    ]);
                   },
                 ),
                 FlatButton(
@@ -90,14 +101,12 @@ class DeviceFild {
                   future: _getWifiName(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     network.text = snapshot.data;
-                    if (snapshot.connectionState ==  ConnectionState.waiting) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(
                         heightFactor: 2,
                         child: CircularProgressIndicator(),
                       );
                     } else {
-                      /*'<unknown ssid>'*/
-                     // print(snapshot.data);
                       if (snapshot.data != '<unknown ssid>') {
                         return Container(
                           child: SingleChildScrollView(
@@ -106,9 +115,9 @@ class DeviceFild {
                               children: <Widget>[
                                 _deviceField(network, Icons.wifi, 'Red', false),
                                 _deviceField(
-                                    password, Icons.lock, 'Contraseña',true),
+                                    password, Icons.lock, 'Contraseña', true),
                                 _deviceField(name, Icons.device_unknown,
-                                    'Nombre Dispositivo',false),
+                                    'Nombre Dispositivo', false),
                               ],
                             ),
                           ),
@@ -131,27 +140,21 @@ class DeviceFild {
         });
   }
 
-  Future<dynamic> showLoading() {
-    // var password = TextEditingController();
+  Future<dynamic> networkLoading() {
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
               actions: <Widget>[
                 FlatButton(
-                  child: Text('Agregar'),
+                  child: Text('OK'),
                   onPressed: () {
                     print('network.text.toString()');
                     Navigator.of(context)
                         .pop([network.text.toString(), name.text.toString()]);
                   },
                 ),
-                FlatButton(
-                  child: Text('Cancelar'),
-                  onPressed: () {
-                    Navigator.of(context).pop('Cancelar');
-                  },
-                )
               ],
               contentPadding: EdgeInsets.only(left: 25, right: 25),
               title: Center(child: Text("Agrega Dispositivo...")),
@@ -160,66 +163,65 @@ class DeviceFild {
               content: FutureBuilder(
                   future: loadData(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
-                   // network.text = snapshot.data;
-                   // print(snapshot.data);
-                    if (snapshot.connectionState ==  ConnectionState.waiting) {
+                    // network.text = snapshot.data;
+
+                    if (snapshot.hasData == true) {
+                      print(snapshot.data);
+                      for (var i = 0; i < snapshot.data.length; i++) {
+                        print('${snapshot.data[i].ssid}');
+                      }
+                      /* Navigator.of(context)
+                          .pop(1);
+                      */
+                      return Center(
+                        heightFactor: 2,
+                        child: Text('Bien..,'),
+                      );
+                    } else {
                       return Center(
                         heightFactor: 2,
                         child: CircularProgressIndicator(),
                       );
-                    } else {
-
-                    //  print(snapshot.data);
-                      if (snapshot.data == WifiState.success) {
-                        return Container(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                Text('Cancelar')
-                              ],
-                            ),
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          height: 100,
-                          child: Center(
-                            child: Column(
-                              children: <Widget>[
-                                Icon(Icons.sentiment_dissatisfied),
-                                Text('\nSin dispositivo valido')
-                              ],
-                            ),
-                          ),
-                        );
-                      }
                     }
                   }));
         });
   }
 
-  Future<void> sendData(var data) async {
-    _data = {'Red': '_net', 'Pass': '_pass', 'Name': '_groupName'};
+  Future<bool> sendData(var data) async {
+    var d=await connection();
+    //print(d);
+   /* var listName = await loadData();
+    print(listName);
+    for (var i = 0; i < listName.length; i++) {
+      print('${listName[i].ssid}');
+    }
+    WifiState _connect = await connection();
+    print(_connect);*/
+
     String url = 'http://192.168.4.1/data.json';
     Map<String, String> headers = {"Content-type": "application/json"};
 
     String _body = json.encode(data);
     // String _body = data;
+    await Future.delayed(Duration(seconds: 5), () {
+
+      print('5 Segundo');
+    });
+    print('<<<<<<<<<<<<<<<<<<<<<<<<<');
 
     var response = await http.post(url, headers: headers, body: _body);
-
+    print('__________________________');
     int statusCode = response.statusCode;
     print(statusCode);
     String body = response.body;
     print(body);
 
     if (statusCode == 200) {
-      Navigator.of(context)
-          .pop([network.text.toString(), 'else']);
+      //Navigator.of(context).pop([network.text.toString(), 'else']);
+      return true;
     } else {
-      Navigator.of(context)
-          .pop([network.text.toString(), 'if']);
+      return false;
+      //Navigator.of(context).pop([network.text.toString(), 'if']);
     }
   }
 }

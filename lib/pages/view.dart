@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 
-List<WifiResult> ssidList = [];
+
 
 class ViewWidget extends StatefulWidget {
   final Map<dynamic, dynamic> data;
@@ -32,7 +32,7 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   Widget _expenses() {
-    loadData();
+    // loadData();
     return Column(
       children: <Widget>[
         Text(
@@ -141,11 +141,7 @@ class _ViewWidget extends State<ViewWidget> {
 
   void loadData() async {
     Wifi.list('').then((list) {
-      setState(() {
-        ssidList = list;
 
-        print(ssidList);
-      });
     });
   }
 }

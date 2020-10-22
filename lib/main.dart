@@ -1,3 +1,4 @@
+
 import 'package:Electrikapp/models/login_state.dart';
 import 'package:Electrikapp/pages/home.dart';
 import 'package:Electrikapp/pages/login.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     loadData();
+  //  showLoading(context);
     return ChangeNotifierProvider<LoginState>(
       create: (context) => LoginState(),
       child: MaterialApp(
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
           ),*/
         routes: {
           '/': (BuildContext context) {
-            //showMyDialog(context);
+
             var state = Provider.of<LoginState>(context, listen: true);
             if (state.loggedIn) {
               return HomePage();
@@ -44,4 +46,5 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+
 }
