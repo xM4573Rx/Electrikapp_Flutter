@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:wifi/wifi.dart';
 
-
-
 class ViewWidget extends StatefulWidget {
   final Map<dynamic, dynamic> data;
 
@@ -18,6 +16,8 @@ class ViewWidget extends StatefulWidget {
 }
 
 class _ViewWidget extends State<ViewWidget> {
+  DatabaseReference dBRef =
+      FirebaseDatabase.instance.reference().child('Groups');
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -33,10 +33,14 @@ class _ViewWidget extends State<ViewWidget> {
 
   Widget _expenses() {
     // loadData();
+    Iterable value = widget.data.values;
+    List _value = value.toList();
+    // print(value.reduce((value, element) => value + element));
+    // Map<dynamic, dynamic> porcent = _value[1];
     return Column(
       children: <Widget>[
         Text(
-          '\$2345.5',
+          '${10}',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
         ),
         Text(
@@ -75,16 +79,32 @@ class _ViewWidget extends State<ViewWidget> {
     );
   }
 
+  Map<bool, Color> status = {false: Colors.black, true: Colors.cyan};
   Widget _item(IconData icon, String name, var _value) {
-    Map<dynamic, dynamic> porcent = _value['Datos'];
-    num energia = porcent['Energia'];
-    num potencia = porcent['Potencia'];
+    bool _status = false;
+    Map<dynamic, dynamic> porcent = _value['All'];
+    num energia = porcent['Energy'];
+    num potencia = porcent['Power'];
     return Padding(
       padding: const EdgeInsets.all(1),
       child: ListTile(
-        leading: Icon(
-          icon,
-          size: 30.0,
+        leading: StatefulBuilder(
+          builder: (context, setState) {
+            return MaterialButton(
+              onPressed: () {
+                setState(() {
+                  _status = !_status;
+                  dBRef.child(name + '/Status').set(_status);
+                });
+              },
+              minWidth: 0,
+              child: Icon(
+                icon,
+                size: 30.0,
+                color: status[_status],
+              ),
+            );
+          },
         ),
         title: Text(
           name,
@@ -123,10 +143,7 @@ class _ViewWidget extends State<ViewWidget> {
         child: ListView.separated(
       itemCount: widget.data.keys.length,
       itemBuilder: (context, index) => Card(
-        child: MaterialButton(
-          onPressed: () {},
-          child: _item(Icons.house, _key[index], _value[index]),
-        ),
+        child: _item(Icons.house, _key[index], _value[index]),
       ),
       /*_item(Icons.phone_android, 'Shopping', 14, 145.12)*/
       separatorBuilder: /*(BuildContext context, int index) => Divider(),*/
@@ -140,8 +157,6 @@ class _ViewWidget extends State<ViewWidget> {
   }
 
   void loadData() async {
-    Wifi.list('').then((list) {
-
-    });
+    Wifi.list('').then((list) {});
   }
 }

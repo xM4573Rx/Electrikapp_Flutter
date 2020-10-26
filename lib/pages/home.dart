@@ -17,7 +17,7 @@ class _HomePageState extends State<HomePage> {
   PageController _controller;
   int currentPage = 3;
   DatabaseReference dBRef =
-      FirebaseDatabase.instance.reference().child('dataMedico');
+      FirebaseDatabase.instance.reference().child('Groups');
 
   @override
   void initState() {
@@ -63,10 +63,10 @@ class _HomePageState extends State<HomePage> {
           child: Icon(Icons.add),
           onPressed: () {
             DeviceFild(context).configureFild().then((value) {print(value);
-            DeviceFild(context).sendData({
+            DeviceFild(context).networkLoading({
               'Red': value[0],
               'Contrasena': value[1],
-              'Name': value[2]
+              'Grupo': value[2]
             });
             });
 
