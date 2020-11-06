@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:Electrikapp/class/deviceFild.dart';
 import 'package:Electrikapp/models/login_state.dart';
 import 'package:Electrikapp/pages/view.dart';
@@ -16,9 +18,10 @@ class _HomePageState extends State<HomePage> {
   //Controler PageView
   PageController _controller;
   int currentPage = 3;
-  DatabaseReference dBRef =
-      FirebaseDatabase.instance.reference().child('Groups');
-
+  DatabaseReference dBRef = FirebaseDatabase.instance.reference().child('/');
+  /*DatabaseReference dBRefCoste =
+      FirebaseDatabase.instance.reference().child('Coste');
+*/
   @override
   void initState() {
     // TODO: implement initState
@@ -51,9 +54,14 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               width: 48.0,
             ),
-            _bottomAction(Icons.file_download, () {}),
-            _bottomAction(Icons.settings, () {
+            _bottomAction(Icons.login_outlined, () {
               Provider.of<LoginState>(context, listen: false).logout();
+            }),
+            _bottomAction(Icons.settings, () {
+
+              DeviceFild(context)
+                  .coste(123,dBRef.reference().child('Coste'))
+                  .then((value) {if(value!=null){dBRef.reference().child('Coste').set(value);}} );
             }),
           ],
         ),
@@ -62,19 +70,20 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
-            DeviceFild(context).configureFild().then((value) {print(value);
-            DeviceFild(context).networkLoading({
-              'Red': value[0],
-              'Contrasena': value[1],
-              'Grupo': value[2]
+            DeviceFild(context).configureFild().then((value) {
+              print(value);
+              DeviceFild(context).networkLoading(
+                  {'Red': value[0], 'Contrasena': value[1], 'Grupo': value[2]});
             });
-            });
-
           }),
       body: _body(),
     );
   }
 
+  num indiceFactor = 1;
+  Map<num, num> fCoste = {0: 1, 1: 1};
+  Map<num, String> UnidadEnergy = {0: '\$', 1: 'KWH'};
+  Map<num, String> UnidadPower = {0: '\$/H', 1: 'KW'};
   Widget _body() {
     return SafeArea(
         child: Column(
@@ -87,9 +96,14 @@ class _HomePageState extends State<HomePage> {
                 var resq = snapshat.data.snapshot;
 
                 Map<dynamic, dynamic> values = resq.value;
-
+                print('values');
+                print(values['Coste']);
+                fCoste[0] = values['Coste'];
                 return ViewWidget(
-                  data: values,
+                  data: values['Groups'],
+                  factor: fCoste[indiceFactor],
+                  unidadEnergy: UnidadEnergy[indiceFactor],
+                  unidadPower: UnidadPower[indiceFactor],
                 );
               }
               return Center(
@@ -107,6 +121,18 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: (newPage) {
           setState(() {
             currentPage = newPage;
+            print(currentPage);
+            switch (currentPage) {
+              case 0:
+//                print();
+                indiceFactor = 0;
+                break;
+              case 1:
+//                print();
+                indiceFactor = 1;
+                break;
+              default:
+            }
           });
         },
         controller: _controller,

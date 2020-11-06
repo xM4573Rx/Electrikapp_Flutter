@@ -10,6 +10,7 @@ class DeviceFild {
   var network = TextEditingController();
   var password = TextEditingController();
   var name = TextEditingController();
+  var costeValue = TextEditingController();
   var _data;
 
   DeviceFild(BuildContext context) {
@@ -17,7 +18,7 @@ class DeviceFild {
   }
 
   Widget _deviceField(TextEditingController customController, IconData icon,
-      String name, bool obscureText) {
+      String name, bool obscureText, TextInputType typeKey) {
     return Container(
       margin: EdgeInsets.all(5),
       child: Column(
@@ -26,6 +27,7 @@ class DeviceFild {
         children: <Widget>[
           //Crear Widget para campos
           new TextFormField(
+            keyboardType: typeKey,
             //controller: password,
             decoration: new InputDecoration(icon: Icon(icon), labelText: name),
             autocorrect: false,
@@ -114,11 +116,16 @@ class DeviceFild {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
-                                _deviceField(network, Icons.wifi, 'Red', false),
+                                _deviceField(network, Icons.wifi, 'Red', false,
+                                    TextInputType.text),
+                                _deviceField(password, Icons.lock, 'Contraseña',
+                                    true, TextInputType.text),
                                 _deviceField(
-                                    password, Icons.lock, 'Contraseña', true),
-                                _deviceField(name, Icons.device_unknown,
-                                    'Nombre Dispositivo', false),
+                                    name,
+                                    Icons.device_unknown,
+                                    'Nombre Dispositivo',
+                                    false,
+                                    TextInputType.text),
                               ],
                             ),
                           ),
@@ -136,6 +143,62 @@ class DeviceFild {
                           ),
                         );
                       }
+                    }
+                  }));
+        });
+  }
+
+  Future<dynamic> coste(num costeInicial, DatabaseReference ref) {
+    // var password = TextEditingController();
+
+    return showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Agregar'),
+                  onPressed: () {
+                    print('network.text.toString()');
+                    Navigator.of(context).pop(num.parse(costeValue.text));
+                  },
+                ),
+                FlatButton(
+                  child: Text('Cancelar'),
+                  onPressed: () {
+                    Navigator.of(context).pop(null);
+                  },
+                )
+              ],
+              contentPadding: EdgeInsets.only(left: 25, right: 25),
+              title: Center(child: Text("Costo KWH...")),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              content: StreamBuilder<Event>(
+                  stream: ref.onValue,
+                  builder: (context, snapshat) {
+                    if (snapshat.hasData) {
+                      costeValue.text = snapshat.data.snapshot.value.toString();
+                      return Container(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                              _deviceField(
+                                  costeValue,
+                                  Icons.attach_money_rounded,
+                                  'Valor en pesos',
+                                  false,
+                                  TextInputType.number),
+                            ],
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
                   }));
         });

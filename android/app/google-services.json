@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:943290148394:android:6fadd7f658fdbfdc2e8553",
+        "mobilesdk_app_id": "1:943290148394:android:1fdb75fc47ba4bf52e8553",
         "android_client_info": {
-          "package_name": "com.example.Electrikapp"
+          "package_name": "co.electrikapp.Electrikapp"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "943290148394-onreb5k6jjtn3k27gisf0acit4q1um96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.electrikapp.Electrikapp",
+            "certificate_hash": "f8e0be0c12a270cfebe573674b54aba092339063"
+          }
+        },
         {
           "client_id": "943290148394-ck37fdhflgbrtmv2lsm623far9aaub4o.apps.googleusercontent.com",
           "client_type": 3
@@ -30,6 +38,13 @@
             {
               "client_id": "943290148394-ck37fdhflgbrtmv2lsm623far9aaub4o.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "943290148394-gcqqk9qvshn9njf3v30s7nbtr0qj762t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.Electrikapp"
+              }
             }
           ]
         }

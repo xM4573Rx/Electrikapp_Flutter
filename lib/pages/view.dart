@@ -10,7 +10,14 @@ import 'package:wifi/wifi.dart';
 class ViewWidget extends StatefulWidget {
   final Map<dynamic, dynamic> data;
 
-  const ViewWidget({Key key, this.data}) : super(key: key);
+  final num factor;
+
+  final String unidadEnergy;
+
+  final String unidadPower;
+
+  const ViewWidget({Key key, this.data, this.factor, this.unidadEnergy, this.unidadPower})
+      : super(key: key);
   @override
   State<StatefulWidget> createState() => _ViewWidget();
 }
@@ -24,8 +31,8 @@ class _ViewWidget extends State<ViewWidget> {
     return Expanded(
         child: Column(
       children: <Widget>[
-        _expenses(),
-        /*_graph()*/ CircularProgressIndicator(),
+        //_expenses(),
+        /*_graph()*/ //CircularProgressIndicator(),
         _list()
       ],
     ));
@@ -81,10 +88,11 @@ class _ViewWidget extends State<ViewWidget> {
 
   Map<bool, Color> status = {false: Colors.black, true: Colors.cyan};
   Widget _item(IconData icon, String name, var _value) {
-    bool _status = false;
     Map<dynamic, dynamic> porcent = _value['All'];
-    num energia = porcent['Energy'];
-    num potencia = porcent['Power'];
+    num energia = (porcent['Energy'] * widget.factor);
+    num potencia = (porcent['Power'] * widget.factor);
+    bool _status = _value['Status'];
+
     return Padding(
       padding: const EdgeInsets.all(1),
       child: ListTile(
@@ -101,7 +109,7 @@ class _ViewWidget extends State<ViewWidget> {
               child: Icon(
                 icon,
                 size: 30.0,
-                color: status[_status],
+                color: status[_value['Status']],
               ),
             );
           },
@@ -111,7 +119,7 @@ class _ViewWidget extends State<ViewWidget> {
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         subtitle: Text(
-          '$energia KWH',
+          '${energia.roundToDouble()/1000}' + ' ' + widget.unidadEnergy,
           style: TextStyle(fontSize: 16.0, color: Colors.blueGrey),
         ),
         trailing: Container(
@@ -121,7 +129,7 @@ class _ViewWidget extends State<ViewWidget> {
           child: Padding(
             padding: const EdgeInsets.all(4),
             child: Text(
-              '$potencia KW',
+              '${potencia.roundToDouble()/1000}' + ' ' + widget.unidadPower,
               style: TextStyle(color: Colors.blueAccent),
             ),
           ),
@@ -143,7 +151,11 @@ class _ViewWidget extends State<ViewWidget> {
         child: ListView.separated(
       itemCount: widget.data.keys.length,
       itemBuilder: (context, index) => Card(
-        child: _item(Icons.house, _key[index], _value[index]),
+        child: _item(
+          Icons.house,
+          _key[index],
+          _value[index],
+        ),
       ),
       /*_item(Icons.phone_android, 'Shopping', 14, 145.12)*/
       separatorBuilder: /*(BuildContext context, int index) => Divider(),*/
